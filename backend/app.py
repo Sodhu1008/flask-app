@@ -28,5 +28,14 @@ def submit():
     """
     return render_template_string(result)
 
+@app.route('/api', methods=['GET'])
+def api():
+    return {
+        "version": "2.0",
+        "features": ["form-processing", "todo-api", "dockerized"],
+        "author": "Tutedude_new",
+        "timestamp": "2026-01-16"
+    }
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
