@@ -1,41 +1,18 @@
-from flask import Flask, request, render_template_string
+from flask import Flask, request, jsonify
+from pymongo import MongoClient
+import os
 
 app = Flask(__name__)
+client = MongoClient('mongodb://mongo:27017/')
+db = client['todoapp']
+todos = db['todos']
 
-@app.route('/')
-def home():
-    return "Backend is running! Access via frontend form."
-
-@app.route('/submit', methods=['POST'])
-def submit():
-    name = request.form['name']
-    physics = request.form['physics']
-    chemistry = request.form['chemistry']
-    maths = request.form['maths']
-    
-    total = int(physics) + int(chemistry) + int(maths)
-    percentage = total / 3
-    
-    result = f"""
-    <h2>Result</h2>
-    <p>Name: {name}</p>
-    <p>Physics: {physics}</p>
-    <p>Chemistry: {chemistry}</p>
-    <p>Maths: {maths}</p>
-    <p>Total: {total}</p>
-    <p>Percentage: {percentage:.2f}%</p>
-    <a href="http://localhost:3000">Back to Form</a>
-    """
-    return render_template_string(result)
-
-@app.route('/api', methods=['GET'])
-def api():
-    return {
-        "version": "2.0",
-        "features": ["form-processing", "todo-api", "dockerized"],
-        "author": "Tutedude_new",
-        "timestamp": "2026-01-16"
+@app.route('/submittodoitem', methods=['POST'])
+def submittodoitem():
+    data = {
+        'itemName': request.form['itemName'],
+        'itemDescription': request.form['itemDescription'],
+        'created_at': datetime.utcnow()
     }
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    todo_id = todos.insert_one(data).inserted_id
+    return f"To-Do created with ID: {str(todo_id)}"
