@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>To-Do Form</title></head>
+<body>
+    <h2>Create To-Do Item</h2>
+    <form action="http://localhost:5000/submittodoitem" method="POST">
+        <p>Item Name: <input type="text" name="itemName" required></p>
+        <p>Item Description: <input type="text" name="itemDescription" required></p>
+        <input type="submit" value="Submit To-Do">
+    </form>
+    <a href="/">Back to Student Form</a>
+</body>
+</html>
